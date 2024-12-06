@@ -1,0 +1,39 @@
+// Simulate backend token verification
+const VALID_TOKEN = "unique_token";
+const PASSWORD = "securepassword";
+
+let selectedItem = null;
+
+// Check access token on page load
+window.onload = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("access_token");
+
+  if (window.location.pathname.endsWith("claim.html")) {
+    if (token !== VALID_TOKEN) {
+      document.body.innerHTML = "<h1>Access Denied</h1><p>You must use the correct QR code to access this page.</p>";
+    }
+  }
+};
+
+// Handle item selection
+function claimItem(item) {
+  selectedItem = item;
+  document.getElementById("items").style.display = "none";
+  document.getElementById("password-section").style.display = "block";
+}
+
+// Handle password submission
+function submitClaim() {
+  const password = document.getElementById("password").value;
+  const status = document.getElementById("status");
+
+  if (password === PASSWORD) {
+    status.style.color = "green";
+    status.textContent = `You have successfully claimed ${selectedItem}!`;
+    // Optionally send this information to the server for logging
+  } else {
+    status.style.color = "red";
+    status.textContent = "Incorrect password. Try again.";
+  }
+}

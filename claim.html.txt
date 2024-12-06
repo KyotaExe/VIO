@@ -1,0 +1,27 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const qrReader = new Html5Qrcode("qr-reader");
+  const status = document.getElementById("status");
+
+  qrReader.start(
+    { facingMode: "environment" }, // Use the back camera
+    {
+      fps: 10, // Scans per second
+      qrbox: { width: 250, height: 250 }, // Scanning box size
+    },
+    (decodedText) => {
+      // Handle successful QR scan
+      status.textContent = `QR Code detected: ${decodedText}`;
+      setTimeout(() => {
+        window.location.href = decodedText; // Redirect to the decoded URL
+      }, 1000);
+    },
+    (errorMessage) => {
+      // Handle errors during scanning
+      console.log(errorMessage);
+      status.textContent = "Scanning...";
+    }
+  ).catch((err) => {
+    console.error(err);
+    status.textContent = "Error starting QR scanner.";
+  });
+});
